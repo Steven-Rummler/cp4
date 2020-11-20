@@ -99,18 +99,14 @@ export default {
           path: r1.data.path,
         });
         this.addItem = r2.data;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     async getItems() {
       try {
         let response = await axios.get("/api/items");
         this.items = response.data;
         return true;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     async deleteItem(item) {
       try {
@@ -118,9 +114,7 @@ export default {
         this.findItem = null;
         this.getItems();
         return true;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     async editItem(item) {
       try {
@@ -131,9 +125,7 @@ export default {
         this.findItem = null;
         this.getItems();
         return true;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
   },
 };
