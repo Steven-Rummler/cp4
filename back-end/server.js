@@ -26,10 +26,10 @@ const itemSchema = new mongoose.Schema({
 // Create a model for items in the museum.
 const Item = mongoose.model("Item", itemSchema);
 
-// Configure multer so that it will upload to '../front-end/public/images'
+// Configure multer so that it will upload to '/var/www/lab4.stevenrummler.com/images/'
 const multer = require("multer");
 const upload = multer({
-  dest: "../front-end/public/images/",
+  dest: "/var/www/lab4.stevenrummler.com/images/",
   limits: {
     fileSize: 10000000,
   },
