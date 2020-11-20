@@ -29,7 +29,7 @@ const Item = mongoose.model("Item", itemSchema);
 // Configure multer so that it will upload to '/var/www/lab4.stevenrummler.com/images/'
 const multer = require("multer");
 const upload = multer({
-  dest: "/var/www/lab4.stevenrummler.com/images/",
+  dest: "images/",
   limits: {
     fileSize: 10000000,
   },
