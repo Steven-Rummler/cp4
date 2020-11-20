@@ -29,7 +29,9 @@ export default {
         let response = await axios.get("/api/items");
         this.items = response.data;
         return true;
-      } catch (error) {}
+      } catch (error) {
+        //console.log(error);
+      }
     },
   },
 };
