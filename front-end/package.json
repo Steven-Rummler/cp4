@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/cli-shared-utils": "^4.2.3",
     "axios": "^0.21.0",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",

@@ -55,7 +55,7 @@ const Character = mongoose.model("Character", characterSchema);
 // Configure multer so that it will upload to '/var/www/lab4.stevenrummler.com/images/'
 const multer = require("multer");
 const upload = multer({
-  dest: "../front-end/public/images/",
+  dest: "/var/www/cp4.stevenrummler.com/images/",
   limits: {
     fileSize: 10000000,
   },
@@ -248,4 +248,4 @@ app.put("/api/characters/:id", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server listening on port 3000!"));
+app.listen(3001, () => console.log("Server listening on port 3001!"));

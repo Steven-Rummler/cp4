@@ -17,6 +17,9 @@
     </div>
     <div class="footer">
       <router-link to="/admin">Admin</router-link>
+      |
+      <a href="https://github.com/Steven-Rummler/cp4">GitHub</a>
+      | Steven and Bryce Rummler
     </div>
   </div>
 </template>
