@@ -1,43 +1,45 @@
 <template>
   <div class="home">
-    <section class="image-gallery">
-      <div class="image" v-for="item in items" :key="item.id">
-        <h2>{{ item.title }}</h2>
-        <h6>{{ item.description }}</h6>
-        <img :src="item.path" />
+    <div class="navbar">
+      <div class="nav-link">
+        <router-link to="/movie">Movies</router-link>
       </div>
-    </section>
+      <div class="nav-link">
+        <router-link to="/book">Books</router-link>
+      </div>
+      <div class="nav-link">
+        <router-link to="/character">Characters</router-link>
+      </div>
+    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "Home",
-  data() {
-    return {
-      items: [],
-    };
-  },
-  created() {
-    this.getItems();
-  },
-  methods: {
-    async getItems() {
-      try {
-        let response = await axios.get("/api/items");
-        this.items = response.data;
-        return true;
-      } catch (error) {
-        //console.log(error);
-      }
-    },
-  },
 };
 </script>
 
-<style scoped>
+<style>
+.navbar {
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  background-color: black;
+}
+
+.nav-link {
+  flex-grow: 1;
+  text-align: center;
+  color: white;
+}
+
+.nav-link a {
+  color: white;
+}
+
+/* above this needs moved */
 .image h2 {
   font-style: italic;
 }

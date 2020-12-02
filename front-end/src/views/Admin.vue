@@ -1,145 +1,43 @@
 <template>
   <div class="admin">
-    <h1>The Admin Page!</h1>
-    <div class="heading">
-      <div class="circle">1</div>
-      <h2>Add an Item</h2>
-    </div>
-    <div class="add">
-      <div class="form">
-        <input v-model="title" placeholder="Title" />
-        <p></p>
-        <textarea v-model="description" placeholder="Description" />
-        <p></p>
-        <input type="file" name="photo" @change="fileChanged" />
-        <button @click="upload">Upload</button>
+    <div class="navbar">
+      <div class="nav-link">
+        <router-link to="/admin/movie">Movies</router-link>
       </div>
-      <div class="upload" v-if="addItem">
-        <h2>{{ addItem.title }}</h2>
-        <h6>{{ addItem.description }}</h6>
-        <img :src="addItem.path" />
+      <div class="nav-link">
+        <router-link to="/admin/book">Books</router-link>
+      </div>
+      <div class="nav-link">
+        <router-link to="/admin/character">Characters</router-link>
       </div>
     </div>
-    <div class="heading">
-      <div class="circle">2</div>
-      <h2>Edit/Delete an Item</h2>
-    </div>
-    <div class="edit">
-      <div class="form">
-        <input v-model="findTitle" placeholder="Search" />
-        <div class="suggestions" v-if="suggestions.length > 0">
-          <div
-            class="suggestion"
-            v-for="s in suggestions"
-            :key="s.id"
-            @click="selectItem(s)"
-          >
-            {{ s.title }}
-          </div>
-        </div>
-      </div>
-      <div class="upload" v-if="findItem">
-        <input v-model="findItem.title" />
-        <p></p>
-        <textarea v-model="findItem.description" />
-        <p></p>
-        <img :src="findItem.path" />
-      </div>
-      <div class="actions" v-if="findItem">
-        <button @click="deleteItem(findItem)">Delete</button>
-        <button @click="editItem(findItem)">Edit</button>
-      </div>
-    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "Admin",
-  data() {
-    return {
-      title: "",
-      description: "",
-      file: null,
-      addItem: null,
-      items: [],
-      findTitle: "",
-      findItem: null,
-    };
-  },
-  computed: {
-    suggestions() {
-      let items = this.items.filter((item) =>
-        item.title.toLowerCase().startsWith(this.findTitle.toLowerCase())
-      );
-      return items.sort((a, b) => a.title > b.title);
-    },
-  },
-  created() {
-    this.getItems();
-  },
-  methods: {
-    fileChanged(event) {
-      this.file = event.target.files[0];
-    },
-    selectItem(item) {
-      this.findTitle = "";
-      this.findItem = item;
-    },
-    async upload() {
-      try {
-        const formData = new FormData();
-        formData.append("photo", this.file, this.file.name);
-        let r1 = await axios.post("/api/photos", formData);
-        let r2 = await axios.post("/api/items", {
-          title: this.title,
-          description: this.description,
-          path: r1.data.path,
-        });
-        this.addItem = r2.data;
-      } catch (error) {
-        //console.log(error);
-      }
-    },
-    async getItems() {
-      try {
-        let response = await axios.get("/api/items");
-        this.items = response.data;
-        return true;
-      } catch (error) {
-        //console.log(error);
-      }
-    },
-    async deleteItem(item) {
-      try {
-        await axios.delete("/api/items/" + item._id);
-        this.findItem = null;
-        this.getItems();
-        return true;
-      } catch (error) {
-        //console.log(error);
-      }
-    },
-    async editItem(item) {
-      try {
-        await axios.put("/api/items/" + item._id, {
-          title: this.findItem.title,
-          description: this.findItem.description,
-        });
-        this.findItem = null;
-        this.getItems();
-        return true;
-      } catch (error) {
-        //console.log(error);
-      }
-    },
-  },
 };
 </script>
 
-<style scoped>
+<style>
+.navbar {
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  background-color: black;
+}
+
+.section {
+  display: flex;
+  width: 100%;
+  margin: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  flex-direction: column;
+  padding: 20px;
+}
+
 .image h2 {
   font-style: italic;
   font-size: 1em;
@@ -147,13 +45,13 @@ export default {
 
 .heading {
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  justify-content: center;
 }
 
 .heading h2 {
-  margin-top: 8px;
-  margin-left: 10px;
+  font-size: 1.5em;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
 }
 
 .add,
@@ -206,5 +104,10 @@ button {
 .suggestion:hover {
   background-color: #5bdeff;
   color: #fff;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -16,20 +16,46 @@ mongoose.connect("mongodb://localhost:27017/museum", {
   useNewUrlParser: true,
 });
 
-// Create a scheme for items in the museum: a title and a path to an image.
-const itemSchema = new mongoose.Schema({
+const movieSchema = new mongoose.Schema({
   title: String,
   description: String,
-  path: String,
+  director: String,
+  producer: String,
+  studio: String,
+  year: String,
+  rating: String,
+  likes: Number,
+  image_path: String,
 });
 
-// Create a model for items in the museum.
-const Item = mongoose.model("Item", itemSchema);
+const bookSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  author: String,
+  publisher: String,
+  year: String,
+  pages: String,
+  likes: Number,
+  image_path: String,
+});
+
+const characterSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  species: String,
+  age: String,
+  likes: Number,
+  image_path: String,
+});
+
+const Movie = mongoose.model("Movie", movieSchema);
+const Book = mongoose.model("Book", bookSchema);
+const Character = mongoose.model("Character", characterSchema);
 
 // Configure multer so that it will upload to '/var/www/lab4.stevenrummler.com/images/'
 const multer = require("multer");
 const upload = multer({
-  dest: "/var/www/lab4.stevenrummler.com/images/",
+  dest: "../front-end/public/images/",
   limits: {
     fileSize: 10000000,
   },
@@ -47,37 +73,98 @@ app.post("/api/photos", upload.single("photo"), async (req, res) => {
   });
 });
 
-// Create a new item in the museum: takes a title and a path to an image.
-app.post("/api/items", async (req, res) => {
-  const item = new Item({
+app.post("/api/movies", async (req, res) => {
+  const movie = new Movie({
     title: req.body.title,
     description: req.body.description,
-    path: req.body.path,
+    director: req.body.director,
+    producer: req.body.producer,
+    studio: req.body.studio,
+    year: req.body.year,
+    rating: req.body.rating,
+    likes: req.body.likes,
+    image_path: req.body.image_path,
   });
   try {
-    await item.save();
-    res.send(item);
+    await movie.save();
+    res.send(movie);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
 });
 
-// Get a list of all of the items in the museum.
-app.get("/api/items", async (req, res) => {
+app.post("/api/books", async (req, res) => {
+  const book = new Book({
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    publisher: req.body.publisher,
+    year: req.body.year,
+    pages: req.body.pages,
+    likes: req.body.likes,
+    image_path: req.body.image_path,
+  });
   try {
-    let items = await Item.find();
-    res.send(items);
+    await book.save();
+    res.send(book);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
 });
 
-// Delete the specified item from the museum.
-app.delete("/api/items/:id", async (req, res) => {
+app.post("/api/characters", async (req, res) => {
+  const character = new Character({
+    name: req.body.name,
+    description: req.body.description,
+    species: req.body.species,
+    age: req.body.age,
+    likes: req.body.likes,
+    image_path: req.body.image_path,
+  });
   try {
-    await Item.deleteOne({ _id: req.params.id });
+    await character.save();
+    res.send(character);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/api/movies", async (req, res) => {
+  try {
+    let movies = await Movie.find();
+    res.send(movies);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/api/books", async (req, res) => {
+  try {
+    let books = await Book.find();
+    res.send(books);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/api/characters", async (req, res) => {
+  try {
+    let characters = await Character.find();
+    res.send(characters);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.delete("/api/movies/:id", async (req, res) => {
+  try {
+    await Movie.deleteOne({ _id: req.params.id });
     res.sendStatus(200);
   } catch (error) {
     console.log(error);
@@ -85,14 +172,76 @@ app.delete("/api/items/:id", async (req, res) => {
   }
 });
 
-// Edit the specific item's title.
-app.put("/api/items/:id", async (req, res) => {
+app.delete("/api/books/:id", async (req, res) => {
   try {
-    let item = await Item.findOne({ _id: req.params.id });
-    item.title = req.body.title;
-    item.description = req.body.description;
-    await item.save();
-    res.send(item);
+    await Book.deleteOne({ _id: req.params.id });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.delete("/api/characters/:id", async (req, res) => {
+  try {
+    await Character.deleteOne({ _id: req.params.id });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put("/api/movies/:id", async (req, res) => {
+  try {
+    let movie = await Movie.findOne({ _id: req.params.id });
+    (movie.title = req.body.title),
+      (movie.description = req.body.description),
+      (movie.director = req.body.director),
+      (movie.producer = req.body.producer),
+      (movie.studio = req.body.studio),
+      (movie.year = req.body.year),
+      (movie.rating = req.body.rating),
+      (movie.likes = req.body.likes),
+      (movie.image_path = req.body.image_path),
+      await movie.save();
+    res.send(movie);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put("/api/books/:id", async (req, res) => {
+  try {
+    let book = await Book.findOne({ _id: req.params.id });
+    (book.title = req.body.title),
+      (book.description = req.body.description),
+      (book.author = req.body.author),
+      (book.publisher = req.body.publisher),
+      (book.year = req.body.year),
+      (book.pages = req.body.pages),
+      (book.likes = req.body.likes),
+      (book.image_path = req.body.image_path),
+      await book.save();
+    res.send(book);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put("/api/characters/:id", async (req, res) => {
+  try {
+    let character = await Character.findOne({ _id: req.params.id });
+    (character.name = req.body.name),
+      (character.description = req.body.description),
+      (character.species = req.body.species),
+      (character.age = req.body.age),
+      (character.likes = req.body.likes),
+      (character.image_path = req.body.image_path),
+      await character.save();
+    res.send(character);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
